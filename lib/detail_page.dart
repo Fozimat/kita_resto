@@ -12,7 +12,11 @@ class RestaurantDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(restaurant.name)),
+      appBar: AppBar(
+        title: Text(restaurant.name),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
