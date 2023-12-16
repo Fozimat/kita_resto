@@ -12,6 +12,8 @@ class RestaurantListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kita Resto'),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(20.0),
           child: Padding(
@@ -21,7 +23,7 @@ class RestaurantListPage extends StatelessWidget {
               child: Text(
                 'Recommendation restaurants for you!',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.black54),
+                    fontWeight: FontWeight.w500, color: Colors.white70),
               ),
             ),
           ),
@@ -45,7 +47,6 @@ class RestaurantListPage extends StatelessWidget {
             itemCount: restaurants.length,
             itemBuilder: (context, index) {
               final Restaurant restaurant = restaurants[index];
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -71,8 +72,26 @@ class RestaurantListPage extends StatelessWidget {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(restaurant.city),
-                        Text('Rating: ${restaurant.rating}'),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            Text(restaurant.city),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            Text('${restaurant.rating}'),
+                          ],
+                        ),
                       ],
                     ),
                     onTap: () {
