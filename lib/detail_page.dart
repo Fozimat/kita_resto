@@ -40,7 +40,7 @@ class RestaurantDetailPage extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(
-                        Icons.maps_home_work_outlined,
+                        Icons.location_on,
                         color: Colors.red,
                         size: 24.0,
                       ),
