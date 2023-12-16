@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kita_resto/detail_page.dart';
 import 'package:kita_resto/restaurant.dart';
 
 class RestaurantListPage extends StatelessWidget {
@@ -74,7 +75,11 @@ class RestaurantListPage extends StatelessWidget {
                         Text('Rating: ${restaurant.rating}'),
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RestaurantDetailPage.routeName,
+                          arguments: restaurant);
+                    },
                   ),
                 ),
               );
