@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kita_resto/restaurant.dart';
+import 'package:kita_resto/data/model/restaurant.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   static const routeName = '/restaurant/detail';

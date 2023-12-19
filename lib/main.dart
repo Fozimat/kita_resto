@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kita_resto/detail_page.dart';
-import 'package:kita_resto/list_page.dart';
-import 'package:kita_resto/restaurant.dart';
+import 'package:kita_resto/data/model/restaurant.dart';
+import 'package:kita_resto/ui/detail_page.dart';
+import 'package:kita_resto/ui/list_page.dart';
 
 void main() {
   runApp(const MainApp());
