@@ -1,13 +1,33 @@
-import 'dart:convert';
+class RestaurantResult {
+  final bool error;
+  final String message;
+  final int count;
+  final List<Restaurant> restaurants;
+
+  RestaurantResult({
+    required this.error,
+    required this.message,
+    required this.count,
+    required this.restaurants,
+  });
+
+  factory RestaurantResult.fromJson(Map<String, dynamic> json) =>
+      RestaurantResult(
+        error: json["error"],
+        message: json["message"],
+        count: json["count"],
+        restaurants: List<Restaurant>.from(
+            json["restaurants"].map((x) => Restaurant.fromJson(x))),
+      );
+}
 
 class Restaurant {
-  String id;
-  String name;
-  String description;
-  String pictureId;
-  String city;
-  double rating;
-  Menu menus;
+  final String id;
+  final String name;
+  final String description;
+  final String pictureId;
+  final String city;
+  final double rating;
 
   Restaurant({
     required this.id,
@@ -16,7 +36,6 @@ class Restaurant {
     required this.pictureId,
     required this.city,
     required this.rating,
-    required this.menus,
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
@@ -26,8 +45,16 @@ class Restaurant {
         pictureId: json["pictureId"],
         city: json["city"],
         rating: json["rating"]?.toDouble(),
-        menus: Menu.fromJson(json["menus"]),
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+        "pictureId": pictureId,
+        "city": city,
+        "rating": rating,
+      };
 }
 
 class Menu {
@@ -67,15 +94,4 @@ class Food {
   factory Food.fromJson(Map<String, dynamic> json) => Food(
         name: json["name"],
       );
-}
-
-List<Restaurant> parseRestaurants(String? json) {
-  if (json == null) {
-    return [];
-  }
-
-  final Map<String, dynamic> jsonData = jsonDecode(json);
-  final List<dynamic> restaurantsData = jsonData["restaurants"];
-
-  return restaurantsData.map((data) => Restaurant.fromJson(data)).toList();
 }

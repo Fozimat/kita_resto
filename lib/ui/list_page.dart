@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant.dart';
-import 'package:kita_resto/ui/detail_page.dart';
+import 'package:kita_resto/ui/card_restaurant.dart';
 
-class RestaurantListPage extends StatelessWidget {
+class RestaurantListPage extends StatefulWidget {
   static const routeName = '/restaurant';
 
   const RestaurantListPage({Key? key}) : super(key: key);
+
+  @override
+  State<RestaurantListPage> createState() => _RestaurantListPageState();
+}
+
+class _RestaurantListPageState extends State<RestaurantListPage> {
+  late Future<RestaurantResult> _restaurant;
+
+  @override
+  void initState() {
+    super.initState();
+    _restaurant = ApiService().getRestaurant();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,81 +43,29 @@ class RestaurantListPage extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<String>(
-        future: DefaultAssetBundle.of(context)
-            .loadString('assets/local_restaurant.json'),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData) {
+      body: FutureBuilder(
+        future: _restaurant,
+        builder: (context, AsyncSnapshot<RestaurantResult> snapshot) {
+          var state = snapshot.connectionState;
+          if (state != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
-          }
-
-          final List<Restaurant> restaurants = parseRestaurants(snapshot.data);
-
-          return ListView.builder(
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
-              final Restaurant restaurant = restaurants[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  color: Colors.white,
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(10),
-                    leading: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          image: NetworkImage(restaurant.pictureId),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    title: Text(restaurant.name),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              size: 16,
-                              color: Colors.red,
-                            ),
-                            Text(restaurant.city),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              size: 16,
-                              color: Colors.red,
-                            ),
-                            Text('${restaurant.rating}'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, RestaurantDetailPage.routeName,
-                          arguments: restaurant);
-                    },
-                  ),
-                ),
+          } else {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data?.restaurants.length,
+                  itemBuilder: (context, index) {
+                    var restaurant = snapshot.data?.restaurants[index];
+                    return CardRestaurant(restaurant: restaurant!);
+                  });
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Material(child: Text(snapshot.error.toString())),
               );
-            },
-          );
+            } else {
+              return const Material(child: Text(''));
+            }
+          }
         },
       ),
     );

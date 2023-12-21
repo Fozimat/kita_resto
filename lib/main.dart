@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kita_resto/data/model/restaurant.dart';
 import 'package:kita_resto/ui/detail_page.dart';
 import 'package:kita_resto/ui/list_page.dart';
 
@@ -18,8 +17,7 @@ class MainApp extends StatelessWidget {
         routes: {
           RestaurantListPage.routeName: (context) => const RestaurantListPage(),
           RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-              restaurant:
-                  ModalRoute.of(context)?.settings.arguments as Restaurant)
+              id: ModalRoute.of(context)?.settings.arguments as String)
         });
   }
 }
