@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:kita_resto/data/model/restaurant.dart';
 import 'package:http/http.dart' as http;
 import 'package:kita_resto/data/model/restaurant_detail.dart';
+import 'package:kita_resto/data/model/restaurant_search.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://restaurant-api.dicoding.dev/';
-  static const String smallImage = '$_baseUrl/images/small/';
+  static const String smallImageUrl = '$_baseUrl/images/small/';
 
   Future<RestaurantResult> getRestaurant() async {
     final response = await http.get(Uri.parse('$_baseUrl/list'));
@@ -26,7 +27,16 @@ class ApiService {
     }
   }
 
+  Future<RestaurantSearchResult> getSearchRestaurant(String query) async {
+    final response = await http.get(Uri.parse('$_baseUrl/search?q=$query'));
+    if (response.statusCode == 200) {
+      return RestaurantSearchResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to get restaurant');
+    }
+  }
+
   static getSmallImageUrl() {
-    return smallImage;
+    return smallImageUrl;
   }
 }

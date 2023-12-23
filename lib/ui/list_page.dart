@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/provider/restaurants_provider.dart';
 import 'package:kita_resto/ui/card_restaurant.dart';
+import 'package:kita_resto/ui/search_page.dart';
 import 'package:kita_resto/utils/enum_result.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,13 @@ class RestaurantListPage extends StatelessWidget {
         title: const Text('Kita Resto'),
         foregroundColor: Colors.white,
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RestaurantSearchPage.routeName);
+              },
+              icon: const Icon(Icons.search)),
+        ],
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(20.0),
           child: Padding(
