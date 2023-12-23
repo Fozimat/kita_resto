@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant_detail.dart';
@@ -16,9 +14,6 @@ class RestaurantDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Restaurant: $id');
-    final dynamic arguments = ModalRoute.of(context)?.settings.arguments;
-    print('Arguments: $arguments');
     return Scaffold(
       appBar: AppBar(
         title: ChangeNotifierProvider(

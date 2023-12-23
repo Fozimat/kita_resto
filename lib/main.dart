@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kita_resto/data/api/api_service.dart';
-import 'package:kita_resto/provider/restaurant_detail_provider.dart';
-import 'package:kita_resto/provider/restaurants_provider.dart';
 import 'package:kita_resto/ui/detail_page.dart';
 import 'package:kita_resto/ui/list_page.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MainApp());
