@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
-import 'package:kita_resto/data/model/restaurant.dart';
+import 'package:kita_resto/provider/restaurants_provider.dart';
 import 'package:kita_resto/ui/card_restaurant.dart';
+import 'package:kita_resto/utils/enum_result.dart';
+import 'package:provider/provider.dart';
 
-class RestaurantListPage extends StatefulWidget {
+class RestaurantListPage extends StatelessWidget {
   static const routeName = '/restaurant';
 
   const RestaurantListPage({Key? key}) : super(key: key);
-
-  @override
-  State<RestaurantListPage> createState() => _RestaurantListPageState();
-}
-
-class _RestaurantListPageState extends State<RestaurantListPage> {
-  late Future<RestaurantResult> _restaurant;
-
-  @override
-  void initState() {
-    super.initState();
-    _restaurant = ApiService().getRestaurant();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +32,38 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: _restaurant,
-        builder: (context, AsyncSnapshot<RestaurantResult> snapshot) {
-          var state = snapshot.connectionState;
-          if (state != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (snapshot.hasData) {
+      body: ChangeNotifierProvider<RestaurantsProvider>(
+        create: (context) => RestaurantsProvider(apiService: ApiService()),
+        child: Consumer<RestaurantsProvider>(
+          builder: (context, state, _) {
+            if (state.state == ResultState.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.state == ResultState.hasData) {
               return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data?.restaurants.length,
-                  itemBuilder: (context, index) {
-                    var restaurant = snapshot.data?.restaurants[index];
-                    return CardRestaurant(restaurant: restaurant!);
-                  });
-            } else if (snapshot.hasError) {
+                shrinkWrap: true,
+                itemCount: state.result.restaurants.length,
+                itemBuilder: (context, index) {
+                  var restaurant = state.result.restaurants[index];
+                  return CardRestaurant(restaurant: restaurant);
+                },
+              );
+            } else if (state.state == ResultState.noData) {
               return Center(
-                child: Material(child: Text(snapshot.error.toString())),
+                child: Material(child: Text(state.message)),
+              );
+            } else if (state.state == ResultState.error) {
+              return Center(
+                child: Material(child: Text(state.message)),
               );
             } else {
-              return const Material(child: Text(''));
+              return const Center(
+                child: Material(
+                  child: Text(''),
+                ),
+              );
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }

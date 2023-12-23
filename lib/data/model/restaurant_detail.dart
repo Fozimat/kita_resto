@@ -1,7 +1,7 @@
 class RestaurantDetailResult {
   final bool error;
   final String message;
-  final Restaurant restaurant;
+  final Restaurant? restaurant;
 
   RestaurantDetailResult({
     required this.error,
@@ -13,13 +13,15 @@ class RestaurantDetailResult {
       RestaurantDetailResult(
         error: json["error"],
         message: json["message"],
-        restaurant: Restaurant.fromJson(json["restaurant"]),
+        restaurant: json["restaurant"] != null
+            ? Restaurant.fromJson(json["restaurant"])
+            : null, // Handle null case
       );
 
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,
-        "restaurant": restaurant.toJson(),
+        "restaurant": restaurant?.toJson(),
       };
 }
 
