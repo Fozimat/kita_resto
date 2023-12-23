@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant_detail.dart';
@@ -37,9 +40,19 @@ class RestaurantDetailProvider extends ChangeNotifier {
         return _restaurantDetailResult = restaurantDetail;
       }
     } catch (e) {
-      _state = ResultState.error;
-      notifyListeners();
-      return _message = 'Error --> $e';
+      if (e is SocketException) {
+        _state = ResultState.error;
+        notifyListeners();
+        return _message = 'No Internet Connection';
+      } else if (e is TimeoutException) {
+        _state = ResultState.error;
+        notifyListeners();
+        return _message = "Timeout exception";
+      } else {
+        _state = ResultState.error;
+        notifyListeners();
+        return _message = "Unhandled exception";
+      }
     }
   }
 }

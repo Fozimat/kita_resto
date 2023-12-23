@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant_search.dart';
 import 'package:kita_resto/provider/restaurant_search_provider.dart';
+import 'package:kita_resto/ui/detail_page.dart';
 import 'package:kita_resto/utils/enum_result.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,7 @@ class RestaurantSearchPage extends StatelessWidget {
           itemCount: state.result.restaurants.length,
           itemBuilder: (context, index) {
             var restaurant = state.result.restaurants[index];
-            return _buildRestaurantCard(restaurant);
+            return _buildRestaurantCard(context, restaurant);
           },
         );
       case ResultState.noData:
@@ -77,7 +78,7 @@ class RestaurantSearchPage extends StatelessWidget {
     }
   }
 
-  Widget _buildRestaurantCard(Restaurant restaurant) {
+  Widget _buildRestaurantCard(BuildContext context, Restaurant restaurant) {
     return Material(
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
@@ -119,7 +120,10 @@ class RestaurantSearchPage extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, RestaurantDetailPage.routeName,
+              arguments: restaurant.id);
+        },
       ),
     );
   }
