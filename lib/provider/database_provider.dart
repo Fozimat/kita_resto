@@ -7,10 +7,11 @@ class DatabaseProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
 
   DatabaseProvider({required this.databaseHelper}) {
+    _state = ResultState.loading;
     _getBookmarks();
   }
 
-  late ResultState _state;
+  late ResultState _state = ResultState.loading;
   ResultState get state => _state;
 
   String _message = '';
