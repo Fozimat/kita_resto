@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant_detail.dart';
-import 'package:kita_resto/utils/enum_result.dart';
+import 'package:kita_resto/utils/result_state.dart';
 
 class RestaurantDetailProvider extends ChangeNotifier {
   final ApiService apiService;

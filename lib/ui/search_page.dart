@@ -3,7 +3,7 @@ import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/data/model/restaurant_search.dart';
 import 'package:kita_resto/provider/restaurant_search_provider.dart';
 import 'package:kita_resto/ui/detail_page.dart';
-import 'package:kita_resto/utils/enum_result.dart';
+import 'package:kita_resto/utils/result_state.dart';
 import 'package:provider/provider.dart';
 
 class RestaurantSearchPage extends StatelessWidget {
