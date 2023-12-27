@@ -10,7 +10,7 @@ class RestaurantDetailPage extends StatelessWidget {
 
   final String id;
 
-  const RestaurantDetailPage({Key? key, required this.id}) : super(key: key);
+  const RestaurantDetailPage({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class FavoritePage extends StatefulWidget {
   static const routeName = '/favorite';
 
-  const FavoritePage({Key? key}) : super(key: key);
+  const FavoritePage({super.key});
 
   @override
   State<FavoritePage> createState() => _FavoritePageState();
