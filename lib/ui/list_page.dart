@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kita_resto/data/api/api_service.dart';
 import 'package:kita_resto/provider/restaurants_provider.dart';
-import 'package:kita_resto/ui/favorite_page.dart';
-import 'package:kita_resto/ui/setting_page.dart';
-import 'package:kita_resto/widget/buttom_navigation_bar.dart';
 import 'package:kita_resto/widget/card_restaurant.dart';
 import 'package:kita_resto/ui/search_page.dart';
 import 'package:kita_resto/utils/result_state.dart';
 import 'package:provider/provider.dart';
 
-class RestaurantListPage extends StatefulWidget {
-  static const routeName = '/restaurant';
-
-  const RestaurantListPage({Key? key}) : super(key: key);
-
-  @override
-  State<RestaurantListPage> createState() => _RestaurantListPageState();
-}
-
-class _RestaurantListPageState extends State<RestaurantListPage> {
-  int _bottomNavIndex = 0;
+class RestaurantListPage extends StatelessWidget {
+  const RestaurantListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,60 +37,40 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _bottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _bottomNavIndex = index;
-          });
-        },
-      ),
-      body: _buildPageNavigation(_bottomNavIndex),
+      body: _buildPageNavigation(),
     );
   }
 
-  Widget _buildPageNavigation(int index) {
-    switch (index) {
-      case 0:
-        return ChangeNotifierProvider<RestaurantsProvider>(
-          create: (context) => RestaurantsProvider(apiService: ApiService()),
-          child: Consumer<RestaurantsProvider>(
-            builder: (context, state, _) {
-              if (state.state == ResultState.loading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state.state == ResultState.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.result.restaurants.length,
-                  itemBuilder: (context, index) {
-                    var restaurant = state.result.restaurants[index];
-                    return CardRestaurant(restaurant: restaurant);
-                  },
-                );
-              } else if (state.state == ResultState.noData) {
-                return Center(
-                  child: Material(child: Text(state.message)),
-                );
-              } else if (state.state == ResultState.error) {
-                return Center(
-                  child: Material(child: Text(state.message)),
-                );
-              } else {
-                return const Center(
-                  child: Material(
-                    child: Text(''),
-                  ),
-                );
-              }
+  Widget _buildPageNavigation() {
+    return Consumer<RestaurantsProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.state == ResultState.hasData) {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.result.restaurants.length,
+            itemBuilder: (context, index) {
+              var restaurant = state.result.restaurants[index];
+              return CardRestaurant(restaurant: restaurant);
             },
-          ),
-        );
-      case 1:
-        return const FavoritePage();
-      case 2:
-        return const SettingPage();
-      default:
-        return const SizedBox.shrink();
-    }
+          );
+        } else if (state.state == ResultState.noData) {
+          return Center(
+            child: Material(child: Text(state.message)),
+          );
+        } else if (state.state == ResultState.error) {
+          return Center(
+            child: Material(child: Text(state.message)),
+          );
+        } else {
+          return const Center(
+            child: Material(
+              child: Text(''),
+            ),
+          );
+        }
+      },
+    );
   }
 }
