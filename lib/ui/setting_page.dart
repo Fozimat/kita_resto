@@ -1,20 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kita_resto/preferences/settings_preferences.dart';
 import 'package:kita_resto/provider/scheduling_provider.dart';
+import 'package:kita_resto/provider/settings_provider.dart';
 import 'package:kita_resto/widget/custom_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingPage extends StatefulWidget {
+class SettingPage extends StatelessWidget {
   static const routeName = 'settings';
 
   const SettingPage({super.key});
 
-  @override
-  State<SettingPage> createState() => _SettingPageState();
-}
-
-class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,27 +35,36 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
       ),
-      body: ChangeNotifierProvider<SchedulingProvider>(
-        create: (_) => SchedulingProvider(),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
-          child: ListTile(
-            title: const Text('Scheduling News'),
-            trailing: Consumer<SchedulingProvider>(
-              builder: (context, scheduled, _) {
-                return Switch.adaptive(
-                  value: scheduled.isScheduled,
-                  onChanged: (value) async {
-                    if (Platform.isIOS) {
-                      customDialog(context);
-                    } else {
-                      scheduled.scheduledRestaurant(value);
-                    }
-                  },
-                );
-              },
-            ),
+      body: ChangeNotifierProvider<SettingsProvider>(
+        create: (_) => SettingsProvider(
+          settingsPreferences: SettingsPreferences(
+            sharedPreferences: SharedPreferences.getInstance(),
           ),
+        ),
+        child: Consumer<SettingsProvider>(
+          builder: (context, provider, child) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+              child: ListTile(
+                title: const Text('Restaurant Notification'),
+                trailing: Consumer<SchedulingProvider>(
+                  builder: (context, scheduled, _) {
+                    return Switch.adaptive(
+                      value: provider.isSwitchActive,
+                      onChanged: (value) async {
+                        if (Platform.isIOS) {
+                          customDialog(context);
+                        } else {
+                          scheduled.scheduledRestaurant(value);
+                          provider.enableReminder(value);
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kita_resto/common/navigation.dart';
@@ -46,7 +47,7 @@ class NotificationHelper {
       RestaurantResult restaurant) async {
     var channelId = "1";
     var channelName = "channel_01";
-    var channelDescription = "dicoding news channel";
+    var channelDescription = "kita resto channel";
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         channelId, channelName,
@@ -61,11 +62,12 @@ class NotificationHelper {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
 
-    var titleNotification = "<b>Headline News</b>";
-    var titleNews = restaurant.restaurants[0].name;
+    var titleNotification = "<b>Recommended restaurant for you</b>";
+    var titleResto = restaurant
+        .restaurants[Random().nextInt(restaurant.restaurants.length)].name;
 
     await flutterLocalNotificationsPlugin.show(
-        0, titleNotification, titleNews, platformChannelSpecifics,
+        0, titleNotification, titleResto, platformChannelSpecifics,
         payload: json.encode(restaurant.toJson()));
   }
 
