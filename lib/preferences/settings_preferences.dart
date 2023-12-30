@@ -10,13 +10,11 @@ class SettingsPreferences {
 
   Future<bool> get isReminderActive async {
     final prefs = await sharedPreferences;
-    print(prefs.getBool(reminderResto) ?? false);
     return prefs.getBool(reminderResto) ?? false;
   }
 
   void setReminderResto(bool value) async {
     final prefs = await sharedPreferences;
-    print(prefs.setBool(reminderResto, value));
     prefs.setBool(reminderResto, value);
   }
 }
