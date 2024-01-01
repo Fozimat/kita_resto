@@ -76,7 +76,7 @@ class NotificationHelper {
       (String payload) async {
         var data = RestaurantResult.fromJson(json.decode(payload));
         var restaurant = data.restaurants[0];
-        Navigation.intentWithData(route, restaurant);
+        Navigation.intentWithData(route, restaurant.id);
       },
     );
   }
